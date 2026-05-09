@@ -13,6 +13,7 @@
 - CI-equivalent focused checks: `bin/rubocop`, `bin/bundler-audit`, `bin/brakeman --quiet --no-pager --exit-on-warn --exit-on-error`, `bin/rspec`, and `env RAILS_ENV=test bin/rails db:seed:replant`.
 - GitHub Actions test job uses PostgreSQL on localhost and runs `RAILS_ENV=test DATABASE_URL=postgres://postgres:postgres@localhost:5432 bin/rails db:test:prepare spec`.
 - Run one RSpec file with `bin/rspec spec/path/to/file_spec.rb`; add `:line` for a single example.
+- Generate OpenAPI schemas from request specs with `OPENAPI=1 bin/rspec spec/requests`; generated files belong under `swagger/`.
 
 ## Database And Services
 - Devcontainer sets `DB_HOST=postgres` and runs `bin/setup` after create; outside it, `config/database.yml` uses the local Unix socket unless `DB_HOST` is set.
