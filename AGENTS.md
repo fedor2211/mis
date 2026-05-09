@@ -24,9 +24,18 @@
 - RuboCop inherits `rubocop-rails-omakase`; avoid adding local style rules unless the repo needs a real exception.
 - `config/ci.rb` is stricter than the GitHub workflow for Brakeman and also verifies seeds; prefer `bin/ci` before handing off broad changes.
 
+## Application Structure
+- Keep models focused on persistence concerns and lightweight declarations such as associations and enums; do not put business validation flows in models.
+- Keep controllers thin: parameter extraction, service delegation, and JSON rendering only. Move business logic, filtering, persistence orchestration, and branching workflows to service objects.
+- Service objects should inherit from `ApplicationService` and expose `.call(*)`, with instance `#call` raising `NotImplementedError` in the base class.
+- Put request/input validation in dry contracts using `dry-validation` and `dry-schema`, typically under `app/contracts/<domain>/`. Prefer contracts over Active Record validations for API request validation.
+- Serializers should inherit from `ApplicationSerializer`, which inherits from `ActiveModel::Serializer` and centralizes ISO 8601 formatting for `Time`, `ActiveSupport::TimeWithZone`, and `Date` attributes.
+
 ## Testing Notes
 - Test framework is RSpec Rails (`spec/rails_helper.rb`) with FactoryBot available through `factory_bot_rails`.
-- There are currently no app-specific spec files under `spec/**/*_spec.rb`; add focused RSpec coverage when introducing behavior.
+- Add focused RSpec coverage when introducing behavior, including contract specs for dry-validation contracts and request specs for API behavior.
+- Use FactoryBot factories for persisted test records instead of direct `Model.create!` calls in specs.
+- Prefer `let`, `let!`, and `subject` for RSpec setup and actions; avoid defining custom helper methods inside specs unless there is a strong reuse need.
 
 ## Deployment Notes
 - `Dockerfile` is production-oriented; it runs `bin/rails db:prepare` on server startup through `bin/docker-entrypoint`.

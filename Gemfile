@@ -4,6 +4,10 @@ source "https://rubygems.org"
 gem "rails", "~> 8.1.3"
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.1"
+gem "dry-schema", require: "dry/schema"
+gem "dry-validation", require: "dry/validation"
+gem "active_model_serializers"
+
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
