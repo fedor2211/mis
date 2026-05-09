@@ -7,3 +7,10 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+Tag.transaction do
+  Tag::SYSTEM_NAMES.map do |name|
+    tag = Tag.find_or_initialize_by(name: name)
+    tag.update!(persistent: true)
+  end
+end
