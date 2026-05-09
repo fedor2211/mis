@@ -8,6 +8,343 @@ info:
 servers:
 - url: http://localhost:3000
 paths:
+  "/tags":
+    get:
+      summary: index
+      tags:
+      - Tag
+      responses:
+        '200':
+          description: lists tags ordered by name
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tags:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                        persistent:
+                          type: boolean
+                        created_at:
+                          type: string
+                          format: date-time
+                        updated_at:
+                          type: string
+                          format: date-time
+                      required:
+                      - id
+                      - name
+                      - persistent
+                      - created_at
+                      - updated_at
+                required:
+                - tags
+              example:
+                tags:
+                - id: 148
+                  name: calls
+                  persistent: false
+                  created_at: '2026-05-09T15:06:31Z'
+                  updated_at: '2026-05-09T15:06:31Z'
+                - id: 149
+                  name: reports
+                  persistent: false
+                  created_at: '2026-05-09T15:06:31Z'
+                  updated_at: '2026-05-09T15:06:31Z'
+    post:
+      summary: create
+      tags:
+      - Tag
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tag:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                  required:
+                  - name
+              required:
+              - tag
+            example:
+              tag:
+                name: Urgent
+      responses:
+        '201':
+          description: creates a tag
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tag:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+                      persistent:
+                        type: boolean
+                      created_at:
+                        type: string
+                        format: date-time
+                      updated_at:
+                        type: string
+                        format: date-time
+                    required:
+                    - id
+                    - name
+                    - persistent
+                    - created_at
+                    - updated_at
+                required:
+                - tag
+              example:
+                tag:
+                  id: 145
+                  name: urgent
+                  persistent: false
+                  created_at: '2026-05-09T15:06:31Z'
+                  updated_at: '2026-05-09T15:06:31Z'
+        '422':
+          description: does not create a duplicate
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: object
+                    properties:
+                      name:
+                        type: array
+                        items:
+                          type: string
+                    required:
+                    - name
+                required:
+                - errors
+              example:
+                errors:
+                  name:
+                  - has already been taken
+  "/tags/{id}":
+    delete:
+      summary: destroy
+      tags:
+      - Tag
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 155
+      responses:
+        '200':
+          description: destroys a tag
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tag:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+                      persistent:
+                        type: boolean
+                      created_at:
+                        type: string
+                        format: date-time
+                      updated_at:
+                        type: string
+                        format: date-time
+                    required:
+                    - id
+                    - name
+                    - persistent
+                    - created_at
+                    - updated_at
+                required:
+                - tag
+              example:
+                tag:
+                  id: 154
+                  name: remove-me
+                  persistent: false
+                  created_at: '2026-05-09T15:06:31Z'
+                  updated_at: '2026-05-09T15:06:31Z'
+        '422':
+          description: does not destroy the tag
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+                required:
+                - errors
+              example:
+                errors:
+                - cannot be deleted
+    get:
+      summary: show
+      tags:
+      - Tag
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 147
+      responses:
+        '200':
+          description: returns a tag
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tag:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+                      persistent:
+                        type: boolean
+                      created_at:
+                        type: string
+                        format: date-time
+                      updated_at:
+                        type: string
+                        format: date-time
+                    required:
+                    - id
+                    - name
+                    - persistent
+                    - created_at
+                    - updated_at
+                required:
+                - tag
+              example:
+                tag:
+                  id: 147
+                  name: reports
+                  persistent: false
+                  created_at: '2026-05-09T15:06:31Z'
+                  updated_at: '2026-05-09T15:06:31Z'
+    patch:
+      summary: update
+      tags:
+      - Tag
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 153
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tag:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                  required:
+                  - name
+              required:
+              - tag
+            example:
+              tag:
+                name: Updated
+      responses:
+        '200':
+          description: updates a tag
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tag:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+                      persistent:
+                        type: boolean
+                      created_at:
+                        type: string
+                        format: date-time
+                      updated_at:
+                        type: string
+                        format: date-time
+                    required:
+                    - id
+                    - name
+                    - persistent
+                    - created_at
+                    - updated_at
+                required:
+                - tag
+              example:
+                tag:
+                  id: 150
+                  name: updated
+                  persistent: false
+                  created_at: '2026-05-09T15:06:31Z'
+                  updated_at: '2026-05-09T15:06:31Z'
+        '422':
+          description: does not update the tag
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    properties:
+                      name:
+                        type: array
+                        items:
+                          type: string
+                    required:
+                    - name
+                    items:
+                      type: string
+                required:
+                - errors
+              example:
+                errors:
+                - cannot be changed
   "/tasks":
     get:
       summary: index
@@ -34,9 +371,18 @@ paths:
         schema:
           type: string
         example: completed
+      - name: tags
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+        example:
+        - reports
       responses:
         '200':
-          description: filters tasks by created_at date
+          description: filters tasks by assigned tags
           content:
             application/json:
               schema:
@@ -64,6 +410,10 @@ paths:
                         updated_at:
                           type: string
                           format: date-time
+                        tags:
+                          type: array
+                          items:
+                            type: string
                       required:
                       - id
                       - title
@@ -76,13 +426,15 @@ paths:
                 - tasks
               example:
                 tasks:
-                - id: 24
-                  title: Created today
+                - id: 100
+                  title: Tagged task
                   description: ''
                   scheduled_at: '2026-05-09T10:00:00Z'
                   status: new
-                  created_at: '2026-05-09T12:00:00Z'
-                  updated_at: '2026-05-09T14:05:42Z'
+                  tags:
+                  - reports
+                  created_at: '2026-05-09T15:06:31Z'
+                  updated_at: '2026-05-09T15:06:31Z'
     post:
       summary: create
       tags:
@@ -103,6 +455,10 @@ paths:
                     scheduled_at:
                       type: string
                       format: date-time
+                    tags:
+                      type: array
+                      items:
+                        type: string
                   required:
                   - title
                   - description
@@ -114,9 +470,11 @@ paths:
                 title: Check patient chart
                 description: Review current medications
                 scheduled_at: '2026-05-09T10:00:00Z'
+                tags:
+                - reports
       responses:
         '201':
-          description: creates a task and returns the status as a string
+          description: creates a task and returns the status and tags
           content:
             application/json:
               schema:
@@ -142,6 +500,10 @@ paths:
                       updated_at:
                         type: string
                         format: date-time
+                      tags:
+                        type: array
+                        items:
+                          type: string
                     required:
                     - id
                     - title
@@ -154,13 +516,15 @@ paths:
                 - task
               example:
                 task:
-                  id: 19
+                  id: 93
                   title: Check patient chart
                   description: Review current medications
                   scheduled_at: '2026-05-09T10:00:00Z'
                   status: new
-                  created_at: '2026-05-09T14:05:42Z'
-                  updated_at: '2026-05-09T14:05:42Z'
+                  created_at: '2026-05-09T15:06:31Z'
+                  updated_at: '2026-05-09T15:06:31Z'
+                  tags:
+                  - reports
   "/tasks/{id}":
     delete:
       summary: destroy
@@ -172,7 +536,7 @@ paths:
         required: true
         schema:
           type: integer
-        example: 27
+        example: 103
       responses:
         '200':
           description: destroys a task and returns json
@@ -201,6 +565,9 @@ paths:
                       updated_at:
                         type: string
                         format: date-time
+                      tags:
+                        type: array
+                        items: {}
                     required:
                     - id
                     - title
@@ -213,13 +580,14 @@ paths:
                 - task
               example:
                 task:
-                  id: 27
+                  id: 103
                   title: Remove task
                   description: ''
                   scheduled_at: '2026-05-09T10:00:00Z'
                   status: new
-                  created_at: '2026-05-09T14:05:42Z'
-                  updated_at: '2026-05-09T14:05:42Z'
+                  created_at: '2026-05-09T15:06:31Z'
+                  updated_at: '2026-05-09T15:06:31Z'
+                  tags: []
     get:
       summary: show
       tags:
@@ -230,7 +598,7 @@ paths:
         required: true
         schema:
           type: integer
-        example: 20
+        example: 94
       responses:
         '200':
           description: returns a task
@@ -259,6 +627,10 @@ paths:
                       updated_at:
                         type: string
                         format: date-time
+                      tags:
+                        type: array
+                        items:
+                          type: string
                     required:
                     - id
                     - title
@@ -271,13 +643,15 @@ paths:
                 - task
               example:
                 task:
-                  id: 20
+                  id: 94
                   title: Call patient
                   description: ''
                   scheduled_at: '2026-05-09T10:00:00Z'
                   status: in_progress
-                  created_at: '2026-05-09T14:05:42Z'
-                  updated_at: '2026-05-09T14:05:42Z'
+                  created_at: '2026-05-09T15:06:31Z'
+                  updated_at: '2026-05-09T15:06:31Z'
+                  tags:
+                  - calls
     patch:
       summary: update
       tags:
@@ -288,7 +662,7 @@ paths:
         required: true
         schema:
           type: integer
-        example: 26
+        example: 102
       requestBody:
         content:
           application/json:
@@ -302,6 +676,10 @@ paths:
                       type: string
                     status:
                       type: string
+                    tags:
+                      type: array
+                      items:
+                        type: string
                   required:
                   - title
                   - status
@@ -311,6 +689,8 @@ paths:
               task:
                 title: Updated title
                 status: cancelled
+                tags:
+                - reports
       responses:
         '200':
           description: updates a task
@@ -339,6 +719,10 @@ paths:
                       updated_at:
                         type: string
                         format: date-time
+                      tags:
+                        type: array
+                        items:
+                          type: string
                     required:
                     - id
                     - title
@@ -351,10 +735,12 @@ paths:
                 - task
               example:
                 task:
-                  id: 26
+                  id: 102
                   title: Updated title
                   description: ''
                   scheduled_at: '2026-05-09T10:00:00Z'
                   status: cancelled
-                  created_at: '2026-05-09T14:05:42Z'
-                  updated_at: '2026-05-09T14:05:42Z'
+                  created_at: '2026-05-09T15:06:31Z'
+                  updated_at: '2026-05-09T15:06:31Z'
+                  tags:
+                  - reports

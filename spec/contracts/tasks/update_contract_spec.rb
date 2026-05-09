@@ -1,24 +1,15 @@
 require "rails_helper"
 
-RSpec.describe Tasks::ListContract do
-  it "accepts supported filters" do
+RSpec.describe Tasks::UpdateContract do
+  it "accepts valid task attributes" do
     create(:tag, name: "reports")
 
     result = described_class.new.call(
-      status: "completed",
-      scheduled_at: "2026-05-09",
-      created_at: "2026-05-10",
+      title: "Review lab results",
       tags: [ "reports" ]
     )
 
     expect(result).to be_success
-  end
-
-  it "rejects invalid dates" do
-    result = described_class.new.call(scheduled_at: "not-a-date")
-
-    expect(result).to be_failure
-    expect(result.errors.to_h.keys).to include(:scheduled_at)
   end
 
   it "rejects unknown tags" do

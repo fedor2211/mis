@@ -38,11 +38,17 @@ class TasksController < ApplicationController
   private
 
   def task_params
-    params.require(:task).permit(:title, :description, :scheduled_at, :status)
+    params.require(:task).permit(
+      :title,
+      :description,
+      :scheduled_at,
+      :status,
+      tags: []
+    )
   end
 
   def list_params
-    params.permit(:status, :scheduled_at, :created_at)
+    params.permit(:status, :scheduled_at, :created_at, tags: [])
   end
 
   def serialize_task(task)

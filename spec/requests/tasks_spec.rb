@@ -11,19 +11,23 @@ RSpec.describe "Tasks API" do
         task: {
           title: "Check patient chart",
           description: "Review current medications",
-          scheduled_at: scheduled_at
+          scheduled_at: scheduled_at,
+          tags: [ "reports" ]
         }
       }.to_json, headers: headers
     end
 
-    it "creates a task and returns the status as a string" do
+    let!(:tag) { create(:tag, name: "reports") }
+
+    it "creates a task and returns the status and tags" do
       perform_request
 
       expect(response).to have_http_status(:created)
       expect(json.fetch("task")).to include(
         "title" => "Check patient chart",
         "description" => "Review current medications",
-        "status" => "new"
+        "status" => "new",
+        "tags" => [ "reports" ]
       )
     end
   end
@@ -31,7 +35,8 @@ RSpec.describe "Tasks API" do
   describe "GET /tasks/:id" do
     subject(:perform_request) { get "/tasks/#{task.id}", headers: headers }
 
-    let(:task) { create(:task, title: "Call patient", status: :in_progress) }
+    let(:task) { create(:task, title: "Call patient", status: :in_progress, tags: [ tag ]) }
+    let(:tag) { create(:tag, name: "calls") }
 
     it "returns a task" do
       perform_request
@@ -40,7 +45,8 @@ RSpec.describe "Tasks API" do
       expect(json.fetch("task")).to include(
         "id" => task.id,
         "title" => "Call patient",
-        "status" => "in_progress"
+        "status" => "in_progress",
+        "tags" => [ "calls" ]
       )
     end
   end
@@ -87,16 +93,34 @@ RSpec.describe "Tasks API" do
         expect(json.fetch("tasks").pluck("id")).to contain_exactly(matching_task.id)
       end
     end
+
+    context "with tags filter" do
+      subject(:perform_request) { get "/tasks", params: { tags: [ "reports" ] }, headers: headers }
+
+      let(:tag) { create(:tag, name: "reports") }
+      let(:other_tag) { create(:tag, name: "calls") }
+      let!(:matching_task) { create(:task, title: "Tagged task", tags: [ tag ]) }
+      let!(:different_task) { create(:task, title: "Other tagged task", tags: [ other_tag ]) }
+
+      it "filters tasks by assigned tags" do
+        perform_request
+
+        expect(response).to have_http_status(:ok)
+        expect(json.fetch("tasks").pluck("id")).to contain_exactly(matching_task.id)
+      end
+    end
   end
 
   describe "PATCH /tasks/:id" do
     subject(:perform_request) do
       patch "/tasks/#{task.id}", params: {
-        task: { title: "Updated title", status: "cancelled" }
+        task: { title: "Updated title", status: "cancelled", tags: [ "reports" ] }
       }.to_json, headers: headers
     end
 
-    let(:task) { create(:task, title: "Initial title") }
+    let(:task) { create(:task, title: "Initial title", tags: [ old_tag ]) }
+    let(:old_tag) { create(:tag, name: "calls") }
+    let!(:new_tag) { create(:tag, name: "reports") }
 
     it "updates a task" do
       perform_request
@@ -104,7 +128,8 @@ RSpec.describe "Tasks API" do
       expect(response).to have_http_status(:ok)
       expect(json.fetch("task")).to include(
         "title" => "Updated title",
-        "status" => "cancelled"
+        "status" => "cancelled",
+        "tags" => [ "reports" ]
       )
     end
   end
