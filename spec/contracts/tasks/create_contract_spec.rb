@@ -1,13 +1,15 @@
 require "rails_helper"
 
 RSpec.describe Tasks::CreateContract do
+  let(:future_scheduled_at) { 1.day.from_now.iso8601 }
+
   it "accepts valid task attributes" do
     create(:tag, name: "reports")
 
     result = described_class.new.call(
       title: "Review lab results",
       description: "",
-      scheduled_at: "2026-05-09T10:00:00Z",
+      scheduled_at: future_scheduled_at,
       status: "in_progress",
       tags: [ "reports" ]
     )
@@ -25,7 +27,7 @@ RSpec.describe Tasks::CreateContract do
   it "rejects unsupported statuses" do
     result = described_class.new.call(
       title: "Review lab results",
-      scheduled_at: "2026-05-09T10:00:00Z",
+      scheduled_at: future_scheduled_at,
       status: "archived"
     )
 
@@ -36,7 +38,7 @@ RSpec.describe Tasks::CreateContract do
   it "rejects unknown tags" do
     result = described_class.new.call(
       title: "Review lab results",
-      scheduled_at: "2026-05-09T10:00:00Z",
+      scheduled_at: future_scheduled_at,
       tags: [ "missing" ]
     )
 
@@ -49,11 +51,21 @@ RSpec.describe Tasks::CreateContract do
 
     result = described_class.new.call(
       title: "Review lab results",
-      scheduled_at: "2026-05-09T10:00:00Z",
+      scheduled_at: future_scheduled_at,
       tags: [ "Reports" ]
     )
 
     expect(result).to be_failure
     expect(result.errors.to_h.keys).to include(:tags)
+  end
+
+  it "rejects scheduled dates that are not in the future" do
+    result = described_class.new.call(
+      title: "Review lab results",
+      scheduled_at: 1.minute.ago.iso8601
+    )
+
+    expect(result).to be_failure
+    expect(result.errors.to_h.keys).to include(:scheduled_at)
   end
 end

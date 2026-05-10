@@ -27,4 +27,11 @@ RSpec.describe Tasks::UpdateContract do
     expect(result).to be_failure
     expect(result.errors.to_h.keys).to include(:tags)
   end
+
+  it "rejects scheduled dates that are not in the future" do
+    result = described_class.new.call(scheduled_at: 1.minute.ago.iso8601)
+
+    expect(result).to be_failure
+    expect(result.errors.to_h.keys).to include(:scheduled_at)
+  end
 end

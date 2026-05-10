@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "Tasks API" do
   let(:headers) { { "ACCEPT" => "application/json", "CONTENT_TYPE" => "application/json" } }
   let(:json) { JSON.parse(response.body) }
-  let(:scheduled_at) { "2026-05-09T10:00:00Z" }
+  let(:scheduled_at) { 1.day.from_now.iso8601 }
 
   describe "POST /tasks" do
     subject(:perform_request) do

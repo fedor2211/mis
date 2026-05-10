@@ -12,6 +12,10 @@ module Tasks
       validate_tag_names(key, value) if key?
     end
 
+    rule(:scheduled_at) do
+      key.failure("must be greater than current datetime") if value && value.to_time <= Time.current
+    end
+
     private
 
     def validate_tag_names(key, names)
