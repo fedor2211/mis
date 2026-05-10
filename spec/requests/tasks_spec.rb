@@ -114,11 +114,12 @@ RSpec.describe "Tasks API" do
   describe "PATCH /tasks/:id" do
     subject(:perform_request) do
       patch "/tasks/#{task.id}", params: {
-        task: { title: "Updated title", status: "cancelled", tags: [ "reports" ] }
+        task: task_params
       }.to_json, headers: headers
     end
 
     let(:task) { create(:task, title: "Initial title", tags: [ old_tag ]) }
+    let(:task_params) { { title: "Updated title", status: "cancelled", tags: [ "reports" ] } }
     let(:old_tag) { create(:tag, name: "calls") }
     let!(:new_tag) { create(:tag, name: "reports") }
 
@@ -131,6 +132,40 @@ RSpec.describe "Tasks API" do
         "status" => "cancelled",
         "tags" => [ "reports" ]
       )
+    end
+
+    context "with a duplicate template scheduled_at" do
+      let(:task_template) { create(:task_template) }
+      let(:current_scheduled_at) { 2.days.from_now.change(usec: 0) }
+      let(:duplicate_scheduled_at) { 3.days.from_now.change(usec: 0) }
+      let(:task) { create(:task, task_template: task_template, scheduled_at: current_scheduled_at) }
+      let!(:duplicate_task) { create(:task, task_template: task_template, scheduled_at: duplicate_scheduled_at) }
+      let(:task_params) { { scheduled_at: duplicate_scheduled_at.iso8601 } }
+
+      it "does not update the task" do
+        perform_request
+
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(json.fetch("errors").fetch("scheduled_at")).to include("has already been taken for this task template")
+      end
+    end
+
+    context "with a templated task scheduled after the nearest future task" do
+      let(:task_template) { create(:task_template) }
+      let(:current_scheduled_at) { 2.days.from_now.change(usec: 0) }
+      let(:nearest_future_scheduled_at) { 3.days.from_now.change(usec: 0) }
+      let(:task) { create(:task, task_template: task_template, scheduled_at: current_scheduled_at) }
+      let!(:nearest_future_task) { create(:task, task_template: task_template, scheduled_at: nearest_future_scheduled_at) }
+      let(:task_params) { { scheduled_at: (nearest_future_scheduled_at + 1.hour).iso8601 } }
+
+      it "does not update the task" do
+        perform_request
+
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(json.fetch("errors").fetch("scheduled_at")).to include(
+          "must not be greater than nearest future task from same template"
+        )
+      end
     end
   end
 

@@ -1,5 +1,5 @@
 module Tags
-  class UpdateContract < Dry::Validation::Contract
+  class UpdateContract < ApplicationContract
     option :tag_id, optional: true
 
     params do
@@ -9,9 +9,7 @@ module Tags
     rule(:name) do
       next unless value
 
-      relation = Tag.where(name: value.downcase)
-      relation = relation.where.not(id: tag_id) if tag_id
-      key.failure("has already been taken") if relation.exists?
+      key.failure("has already been taken") if tag_name_taken?(value, except_id: tag_id)
     end
   end
 end

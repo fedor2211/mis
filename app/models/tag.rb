@@ -3,6 +3,8 @@ class Tag < ApplicationRecord
 
   has_many :task_tags, dependent: :destroy
   has_many :tasks, through: :task_tags
+  has_many :task_template_tags, dependent: :destroy
+  has_many :task_templates, through: :task_template_tags
 
   before_save :downcase_name
 

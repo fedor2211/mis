@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   resources :tasks
   resources :tags
+  resources :task_templates, only: %i[ index show create destroy ]
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

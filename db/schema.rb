@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_09_000002) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_09_000005) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -32,17 +32,47 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_09_000002) do
     t.index ["task_id"], name: "index_task_tags_on_task_id"
   end
 
+  create_table "task_template_tags", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "tag_id", null: false
+    t.bigint "task_template_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["tag_id"], name: "index_task_template_tags_on_tag_id"
+    t.index ["task_template_id", "tag_id"], name: "index_task_template_tags_on_task_template_id_and_tag_id", unique: true
+    t.index ["task_template_id"], name: "index_task_template_tags_on_task_template_id"
+  end
+
+  create_table "task_templates", force: :cascade do |t|
+    t.date "active_until"
+    t.datetime "created_at", null: false
+    t.date "dates", default: [], null: false, array: true
+    t.string "description", default: "", null: false
+    t.integer "month_day"
+    t.integer "ndays"
+    t.integer "periodicity", null: false
+    t.datetime "scheduled_at", null: false
+    t.string "title", null: false
+    t.datetime "updated_at", null: false
+    t.index ["periodicity"], name: "index_task_templates_on_periodicity"
+  end
+
   create_table "tasks", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "description", default: "", null: false
     t.datetime "scheduled_at", null: false
     t.integer "status", default: 0, null: false
+    t.bigint "task_template_id"
     t.string "title", null: false
     t.datetime "updated_at", null: false
     t.index ["scheduled_at"], name: "index_tasks_on_scheduled_at"
     t.index ["status"], name: "index_tasks_on_status"
+    t.index ["task_template_id", "scheduled_at"], name: "index_tasks_on_task_template_id_and_scheduled_at", unique: true, where: "(task_template_id IS NOT NULL)"
+    t.index ["task_template_id"], name: "index_tasks_on_task_template_id"
   end
 
   add_foreign_key "task_tags", "tags"
   add_foreign_key "task_tags", "tasks"
+  add_foreign_key "task_template_tags", "tags"
+  add_foreign_key "task_template_tags", "task_templates"
+  add_foreign_key "tasks", "task_templates"
 end

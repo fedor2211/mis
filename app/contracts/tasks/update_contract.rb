@@ -1,5 +1,7 @@
 module Tasks
-  class UpdateContract < Dry::Validation::Contract
+  class UpdateContract < ApplicationContract
+    option :task, optional: true
+
     params do
       optional(:title).filled(:string)
       optional(:description).value(:string)
@@ -13,16 +15,37 @@ module Tasks
     end
 
     rule(:scheduled_at) do
-      key.failure("must be greater than current datetime") if key? && value && value.to_time <= Time.current
+      next unless key?
+
+      validate_future_datetime(key, value)
+      next unless task&.task_template_id
+
+      scheduled_at = value.to_time
+
+      if duplicate_template_scheduled_at?(scheduled_at)
+        key.failure("has already been taken for this task template")
+      end
+
+      next_task = nearest_future_template_task
+      if next_task && scheduled_at > next_task.scheduled_at
+        key.failure("must not be greater than nearest future task from same template")
+      end
     end
 
     private
 
-    def validate_tag_names(key, names)
-      key.failure("must not include blank names") if names.any?(&:blank?)
+    def duplicate_template_scheduled_at?(scheduled_at)
+      Task.where(task_template_id: task.task_template_id, scheduled_at: scheduled_at)
+        .where.not(id: task.id)
+        .exists?
+    end
 
-      missing_names = names.uniq - Tag.where(name: names).pluck(:name)
-      key.failure("contains unknown tags: #{missing_names.join(', ')}") if missing_names.any?
+    def nearest_future_template_task
+      Task.where(task_template_id: task.task_template_id)
+        .where.not(id: task.id)
+        .where("scheduled_at > ?", task.scheduled_at)
+        .order(:scheduled_at)
+        .first
     end
   end
 end

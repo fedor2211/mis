@@ -6,12 +6,12 @@ module Tasks
     end
 
     def call
-      validation = UpdateContract.new.call(@attributes)
+      task = Task.find(@id)
+      validation = UpdateContract.new(task: task).call(@attributes)
       return { success: false, errors: validation.errors.to_h } if validation.failure?
 
       attributes = validation.to_h
       tag_names = attributes.delete(:tags)
-      task = Task.find(@id)
       Task.transaction do
         task.update!(attributes)
         assign_tags(task, tag_names) if tag_names

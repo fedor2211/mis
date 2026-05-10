@@ -48,16 +48,16 @@ paths:
                 - tags
               example:
                 tags:
-                - id: 148
+                - id: 103
                   name: calls
                   persistent: false
-                  created_at: '2026-05-09T15:06:31Z'
-                  updated_at: '2026-05-09T15:06:31Z'
-                - id: 149
+                  created_at: '2026-05-10T11:33:04Z'
+                  updated_at: '2026-05-10T11:33:04Z'
+                - id: 104
                   name: reports
                   persistent: false
-                  created_at: '2026-05-09T15:06:31Z'
-                  updated_at: '2026-05-09T15:06:31Z'
+                  created_at: '2026-05-10T11:33:04Z'
+                  updated_at: '2026-05-10T11:33:04Z'
     post:
       summary: create
       tags:
@@ -113,11 +113,11 @@ paths:
                 - tag
               example:
                 tag:
-                  id: 145
+                  id: 100
                   name: urgent
                   persistent: false
-                  created_at: '2026-05-09T15:06:31Z'
-                  updated_at: '2026-05-09T15:06:31Z'
+                  created_at: '2026-05-10T11:33:04Z'
+                  updated_at: '2026-05-10T11:33:04Z'
         '422':
           description: does not create a duplicate
           content:
@@ -151,7 +151,7 @@ paths:
         required: true
         schema:
           type: integer
-        example: 155
+        example: 110
       responses:
         '200':
           description: destroys a tag
@@ -185,11 +185,11 @@ paths:
                 - tag
               example:
                 tag:
-                  id: 154
+                  id: 109
                   name: remove-me
                   persistent: false
-                  created_at: '2026-05-09T15:06:31Z'
-                  updated_at: '2026-05-09T15:06:31Z'
+                  created_at: '2026-05-10T11:33:04Z'
+                  updated_at: '2026-05-10T11:33:04Z'
         '422':
           description: does not destroy the tag
           content:
@@ -216,7 +216,7 @@ paths:
         required: true
         schema:
           type: integer
-        example: 147
+        example: 102
       responses:
         '200':
           description: returns a tag
@@ -250,11 +250,11 @@ paths:
                 - tag
               example:
                 tag:
-                  id: 147
+                  id: 102
                   name: reports
                   persistent: false
-                  created_at: '2026-05-09T15:06:31Z'
-                  updated_at: '2026-05-09T15:06:31Z'
+                  created_at: '2026-05-10T11:33:04Z'
+                  updated_at: '2026-05-10T11:33:04Z'
     patch:
       summary: update
       tags:
@@ -265,7 +265,7 @@ paths:
         required: true
         schema:
           type: integer
-        example: 153
+        example: 108
       requestBody:
         content:
           application/json:
@@ -317,11 +317,11 @@ paths:
                 - tag
               example:
                 tag:
-                  id: 150
+                  id: 105
                   name: updated
                   persistent: false
-                  created_at: '2026-05-09T15:06:31Z'
-                  updated_at: '2026-05-09T15:06:31Z'
+                  created_at: '2026-05-10T11:33:04Z'
+                  updated_at: '2026-05-10T11:33:04Z'
         '422':
           description: does not update the tag
           content:
@@ -345,6 +345,367 @@ paths:
               example:
                 errors:
                 - cannot be changed
+  "/task_templates":
+    get:
+      summary: index
+      tags:
+      - TaskTemplate
+      responses:
+        '200':
+          description: lists task templates
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  task_templates:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        title:
+                          type: string
+                        description:
+                          type: string
+                        periodicity:
+                          type: string
+                        scheduled_at:
+                          type: string
+                          format: date-time
+                        ndays:
+                          type: integer
+                        month_day:
+                          nullable: true
+                        active_until:
+                          nullable: true
+                        tags:
+                          type: array
+                          items: {}
+                        created_at:
+                          type: string
+                          format: date-time
+                        updated_at:
+                          type: string
+                          format: date-time
+                        dates:
+                          type: array
+                          items: {}
+                      required:
+                      - id
+                      - title
+                      - description
+                      - periodicity
+                      - scheduled_at
+                      - ndays
+                      - month_day
+                      - active_until
+                      - tags
+                      - created_at
+                      - updated_at
+                required:
+                - task_templates
+              example:
+                task_templates:
+                - id: 68
+                  title: Template
+                  description: ''
+                  periodicity: daily
+                  scheduled_at: '2026-05-11T10:00:00Z'
+                  ndays: 1
+                  month_day:
+                  active_until:
+                  dates: []
+                  tags: []
+                  created_at: '2026-05-10T11:33:04Z'
+                  updated_at: '2026-05-10T11:33:04Z'
+    post:
+      summary: create
+      tags:
+      - TaskTemplate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                task_template:
+                  type: object
+                  properties:
+                    title:
+                      type: string
+                    description:
+                      type: string
+                    scheduled_at:
+                      type: string
+                      format: date-time
+                    tags:
+                      type: array
+                      items:
+                        type: string
+                    periodicity:
+                      type: string
+                    ndays:
+                      type: integer
+                    for_dates:
+                      type: array
+                      items:
+                        type: string
+                  required:
+                  - title
+                  - description
+                  - scheduled_at
+                  - tags
+              required:
+              - task_template
+            example:
+              task_template:
+                title: Review labs
+                description: Morning review
+                scheduled_at: '2026-05-11T11:33:04Z'
+                tags:
+                - reports
+                periodicity: daily
+                ndays: 1
+                for_dates:
+                - '2026-05-12'
+      responses:
+        '201':
+          description: persists template dates and enqueues task generation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  task_template:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        nullable: true
+                      title:
+                        type: string
+                      description:
+                        type: string
+                      periodicity:
+                        type: string
+                        nullable: true
+                      scheduled_at:
+                        type: string
+                        format: date-time
+                      ndays:
+                        type: integer
+                        nullable: true
+                      month_day:
+                        nullable: true
+                      active_until:
+                        nullable: true
+                      tags:
+                        type: array
+                        items:
+                          type: string
+                      created_at:
+                        type: string
+                        format: date-time
+                      updated_at:
+                        type: string
+                        format: date-time
+                      dates:
+                        type: array
+                        items:
+                          type: string
+                    required:
+                    - id
+                    - title
+                    - description
+                    - periodicity
+                    - scheduled_at
+                    - ndays
+                    - month_day
+                    - active_until
+                    - tags
+                    - created_at
+                    - updated_at
+                required:
+                - task_template
+              example:
+                task_template:
+                  id: 67
+                  title: Review labs
+                  description: Morning review
+                  periodicity: for_dates
+                  scheduled_at: '2026-05-11T11:33:04Z'
+                  ndays:
+                  month_day:
+                  active_until:
+                  tags:
+                  - reports
+                  created_at: '2026-05-10T11:33:04Z'
+                  updated_at: '2026-05-10T11:33:04Z'
+                  dates:
+                  - '2026-05-12'
+  "/task_templates/{id}":
+    delete:
+      summary: destroy
+      tags:
+      - TaskTemplate
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 70
+      responses:
+        '200':
+          description: cancels future tasks and destroys a task template
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  task_template:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      title:
+                        type: string
+                      description:
+                        type: string
+                      periodicity:
+                        type: string
+                      scheduled_at:
+                        type: string
+                        format: date-time
+                      ndays:
+                        type: integer
+                      month_day:
+                        nullable: true
+                      active_until:
+                        nullable: true
+                      tags:
+                        type: array
+                        items: {}
+                      created_at:
+                        type: string
+                        format: date-time
+                      updated_at:
+                        type: string
+                        format: date-time
+                      dates:
+                        type: array
+                        items: {}
+                    required:
+                    - id
+                    - title
+                    - description
+                    - periodicity
+                    - scheduled_at
+                    - ndays
+                    - month_day
+                    - active_until
+                    - tags
+                    - created_at
+                    - updated_at
+                required:
+                - task_template
+              example:
+                task_template:
+                  id: 70
+                  title: Template
+                  description: ''
+                  periodicity: daily
+                  scheduled_at: '2026-05-11T10:00:00Z'
+                  ndays: 1
+                  month_day:
+                  active_until:
+                  tags: []
+                  created_at: '2026-05-10T11:33:04Z'
+                  updated_at: '2026-05-10T11:33:04Z'
+                  dates: []
+    get:
+      summary: show
+      tags:
+      - TaskTemplate
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 69
+      responses:
+        '200':
+          description: returns a task template
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  task_template:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      title:
+                        type: string
+                      description:
+                        type: string
+                      periodicity:
+                        type: string
+                      scheduled_at:
+                        type: string
+                        format: date-time
+                      ndays:
+                        type: integer
+                      month_day:
+                        nullable: true
+                      active_until:
+                        nullable: true
+                      tags:
+                        type: array
+                        items:
+                          type: string
+                      created_at:
+                        type: string
+                        format: date-time
+                      updated_at:
+                        type: string
+                        format: date-time
+                      dates:
+                        type: array
+                        items: {}
+                    required:
+                    - id
+                    - title
+                    - description
+                    - periodicity
+                    - scheduled_at
+                    - ndays
+                    - month_day
+                    - active_until
+                    - tags
+                    - created_at
+                    - updated_at
+                required:
+                - task_template
+              example:
+                task_template:
+                  id: 69
+                  title: Template
+                  description: ''
+                  periodicity: daily
+                  scheduled_at: '2026-05-11T10:00:00Z'
+                  ndays: 1
+                  month_day:
+                  active_until:
+                  tags:
+                  - reports
+                  created_at: '2026-05-10T11:33:04Z'
+                  updated_at: '2026-05-10T11:33:04Z'
+                  dates: []
   "/tasks":
     get:
       summary: index
@@ -414,6 +775,8 @@ paths:
                           type: array
                           items:
                             type: string
+                        task_template_id:
+                          nullable: true
                       required:
                       - id
                       - title
@@ -426,15 +789,16 @@ paths:
                 - tasks
               example:
                 tasks:
-                - id: 100
+                - id: 535
                   title: Tagged task
                   description: ''
                   scheduled_at: '2026-05-09T10:00:00Z'
                   status: new
+                  task_template_id:
                   tags:
                   - reports
-                  created_at: '2026-05-09T15:06:31Z'
-                  updated_at: '2026-05-09T15:06:31Z'
+                  created_at: '2026-05-10T11:33:04Z'
+                  updated_at: '2026-05-10T11:33:04Z'
     post:
       summary: create
       tags:
@@ -463,13 +827,14 @@ paths:
                   - title
                   - description
                   - scheduled_at
+                  - tags
               required:
               - task
             example:
               task:
                 title: Check patient chart
                 description: Review current medications
-                scheduled_at: '2026-05-09T10:00:00Z'
+                scheduled_at: '2026-05-11T11:33:04Z'
                 tags:
                 - reports
       responses:
@@ -494,37 +859,42 @@ paths:
                         format: date-time
                       status:
                         type: string
+                      task_template_id:
+                        nullable: true
+                      tags:
+                        type: array
+                        items:
+                          type: string
                       created_at:
                         type: string
                         format: date-time
                       updated_at:
                         type: string
                         format: date-time
-                      tags:
-                        type: array
-                        items:
-                          type: string
                     required:
                     - id
                     - title
                     - description
                     - scheduled_at
                     - status
+                    - task_template_id
+                    - tags
                     - created_at
                     - updated_at
                 required:
                 - task
               example:
                 task:
-                  id: 93
+                  id: 528
                   title: Check patient chart
                   description: Review current medications
-                  scheduled_at: '2026-05-09T10:00:00Z'
+                  scheduled_at: '2026-05-11T11:33:04Z'
                   status: new
-                  created_at: '2026-05-09T15:06:31Z'
-                  updated_at: '2026-05-09T15:06:31Z'
+                  task_template_id:
                   tags:
                   - reports
+                  created_at: '2026-05-10T11:33:04Z'
+                  updated_at: '2026-05-10T11:33:04Z'
   "/tasks/{id}":
     delete:
       summary: destroy
@@ -536,7 +906,7 @@ paths:
         required: true
         schema:
           type: integer
-        example: 103
+        example: 542
       responses:
         '200':
           description: destroys a task and returns json
@@ -568,6 +938,8 @@ paths:
                       tags:
                         type: array
                         items: {}
+                      task_template_id:
+                        nullable: true
                     required:
                     - id
                     - title
@@ -580,14 +952,15 @@ paths:
                 - task
               example:
                 task:
-                  id: 103
+                  id: 542
                   title: Remove task
                   description: ''
                   scheduled_at: '2026-05-09T10:00:00Z'
                   status: new
-                  created_at: '2026-05-09T15:06:31Z'
-                  updated_at: '2026-05-09T15:06:31Z'
+                  created_at: '2026-05-10T11:33:04Z'
+                  updated_at: '2026-05-10T11:33:04Z'
                   tags: []
+                  task_template_id:
     get:
       summary: show
       tags:
@@ -598,7 +971,7 @@ paths:
         required: true
         schema:
           type: integer
-        example: 94
+        example: 529
       responses:
         '200':
           description: returns a task
@@ -621,37 +994,42 @@ paths:
                         format: date-time
                       status:
                         type: string
+                      task_template_id:
+                        nullable: true
+                      tags:
+                        type: array
+                        items:
+                          type: string
                       created_at:
                         type: string
                         format: date-time
                       updated_at:
                         type: string
                         format: date-time
-                      tags:
-                        type: array
-                        items:
-                          type: string
                     required:
                     - id
                     - title
                     - description
                     - scheduled_at
                     - status
+                    - task_template_id
+                    - tags
                     - created_at
                     - updated_at
                 required:
                 - task
               example:
                 task:
-                  id: 94
+                  id: 529
                   title: Call patient
                   description: ''
                   scheduled_at: '2026-05-09T10:00:00Z'
                   status: in_progress
-                  created_at: '2026-05-09T15:06:31Z'
-                  updated_at: '2026-05-09T15:06:31Z'
+                  task_template_id:
                   tags:
                   - calls
+                  created_at: '2026-05-10T11:33:04Z'
+                  updated_at: '2026-05-10T11:33:04Z'
     patch:
       summary: update
       tags:
@@ -662,7 +1040,7 @@ paths:
         required: true
         schema:
           type: integer
-        example: 102
+        example: 541
       requestBody:
         content:
           application/json:
@@ -683,6 +1061,7 @@ paths:
                   required:
                   - title
                   - status
+                  - tags
               required:
               - task
             example:
@@ -713,34 +1092,62 @@ paths:
                         format: date-time
                       status:
                         type: string
+                      task_template_id:
+                        nullable: true
+                      tags:
+                        type: array
+                        items:
+                          type: string
                       created_at:
                         type: string
                         format: date-time
                       updated_at:
                         type: string
                         format: date-time
-                      tags:
-                        type: array
-                        items:
-                          type: string
                     required:
                     - id
                     - title
                     - description
                     - scheduled_at
                     - status
+                    - task_template_id
+                    - tags
                     - created_at
                     - updated_at
                 required:
                 - task
               example:
                 task:
-                  id: 102
+                  id: 537
                   title: Updated title
                   description: ''
                   scheduled_at: '2026-05-09T10:00:00Z'
                   status: cancelled
-                  created_at: '2026-05-09T15:06:31Z'
-                  updated_at: '2026-05-09T15:06:31Z'
+                  task_template_id:
                   tags:
                   - reports
+                  created_at: '2026-05-10T11:33:04Z'
+                  updated_at: '2026-05-10T11:33:04Z'
+        '422':
+          description: does not update the task
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: object
+                    properties:
+                      scheduled_at:
+                        type: string
+                        format: date-time
+                        items:
+                          type: string
+                    required:
+                    - scheduled_at
+                required:
+                - errors
+              example:
+                errors:
+                  scheduled_at:
+                  - must not be greater than nearest future task from same template

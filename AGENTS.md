@@ -27,9 +27,10 @@
 
 ## Application Structure
 - Keep models focused on persistence concerns and lightweight declarations such as associations and enums; do not put business validation flows in models.
+- Put reusable query scopes in models when the same query is used or expected to be used across multiple application entry points; keep one-off orchestration queries inside services/jobs.
 - Keep controllers thin: parameter extraction, service delegation, and JSON rendering only. Move business logic, filtering, persistence orchestration, and branching workflows to service objects.
 - Service objects should inherit from `ApplicationService` and expose `.call(*)`, with instance `#call` raising `NotImplementedError` in the base class.
-- Put request/input validation in dry contracts using `dry-validation` and `dry-schema`, typically under `app/contracts/<domain>/`. Prefer contracts over Active Record validations for API request validation.
+- Put request/input validation in dry contracts using `dry-validation` and `dry-schema`, typically under `app/contracts/<domain>/`. Contracts should inherit from `ApplicationContract`; put reusable contract helper methods there instead of duplicating them in domain contracts. Prefer contracts over Active Record validations for API request validation.
 - Serializers should inherit from `ApplicationSerializer`, which inherits from `ActiveModel::Serializer` and centralizes ISO 8601 formatting for `Time`, `ActiveSupport::TimeWithZone`, and `Date` attributes.
 
 ## Testing Notes

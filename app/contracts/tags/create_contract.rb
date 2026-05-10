@@ -1,11 +1,11 @@
 module Tags
-  class CreateContract < Dry::Validation::Contract
+  class CreateContract < ApplicationContract
     params do
       required(:name).filled(:string)
     end
 
     rule(:name) do
-      key.failure("has already been taken") if Tag.exists?(name: value.downcase)
+      key.failure("has already been taken") if tag_name_taken?(value)
     end
   end
 end
