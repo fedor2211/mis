@@ -13,7 +13,7 @@ module Tasks
       tasks = tasks.where(status: filters[:status]) if filters[:status]
       tasks = tasks.where(scheduled_at: filters[:scheduled_at].all_day) if filters[:scheduled_at]
       tasks = tasks.where(created_at: filters[:created_at].all_day) if filters[:created_at]
-      tasks = tasks.joins(:tags).where(tags: { name: filters[:tags] }).distinct if filters[:tags]
+      tasks = tasks.includes(:tags).where(tags: { name: filters[:tags] }).distinct if filters[:tags]
 
       { success: true, tasks: tasks }
     end

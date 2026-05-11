@@ -3,10 +3,6 @@ class TaskTemplateSerializer < ApplicationSerializer
               :created_at, :updated_at
 
   def tags
-    if object.persisted?
-      object.tags.order(:name).pluck(:name)
-    else
-      object.tags.sort_by(&:name).map(&:name)
-    end
+    object.tags.pluck(:name)
   end
 end
