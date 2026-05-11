@@ -21,4 +21,5 @@ Things you may want to cover:
 
 * Deployment instructions
 
-* ...
+* Run docker compose in production
+RAILS_MASTER_KEY=$(cat config/master.key) MIS_DATABASE_PASSWORD=postgres docker compose up -d --build
