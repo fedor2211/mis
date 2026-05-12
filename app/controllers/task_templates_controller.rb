@@ -3,7 +3,8 @@ class TaskTemplatesController < ApplicationController
   rescue_from ActionController::ParameterMissing, with: :render_parameter_missing
 
   def index
-    result = TaskTemplates::ListService.call
+    result = TaskTemplates::ListService.call(list_params.to_h)
+    return render_errors(result) unless result[:success]
 
     render json: { task_templates: serialize_collection(result[:task_templates], TaskTemplateSerializer) }
   end
@@ -41,6 +42,10 @@ class TaskTemplatesController < ApplicationController
       tags: [],
       for_dates: []
     )
+  end
+
+  def list_params
+    params.permit(:page, :per_page)
   end
 
   def serialize_task_template(task_template)

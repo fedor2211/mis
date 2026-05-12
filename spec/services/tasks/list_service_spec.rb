@@ -18,7 +18,17 @@ RSpec.describe Tasks::ListService do
 
   it "returns tasks ordered by newest first" do
     expect(call_service).to include(success: true)
+    expect(call_service[:tasks].limit_value).to eq(100)
+    expect(call_service[:tasks].offset_value).to eq(0)
     expect(call_service[:tasks].pluck(:id)).to eq([ newer_task.id, older_task.id ])
+  end
+
+  context "with pagination" do
+    let(:filters) { { page: 2, per_page: 1 } }
+
+    it "returns the requested page" do
+      expect(call_service[:tasks]).to contain_exactly(older_task)
+    end
   end
 
   context "with status and scheduled_at filters" do
@@ -59,6 +69,15 @@ RSpec.describe Tasks::ListService do
     it "returns validation errors" do
       expect(call_service).to include(success: false)
       expect(call_service[:errors].keys).to include(:status)
+    end
+  end
+
+  context "with invalid pagination" do
+    let(:filters) { { page: 0, per_page: 0 } }
+
+    it "returns validation errors" do
+      expect(call_service).to include(success: false)
+      expect(call_service[:errors].keys).to include(:page, :per_page)
     end
   end
 end

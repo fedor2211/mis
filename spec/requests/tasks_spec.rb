@@ -109,6 +109,25 @@ RSpec.describe "Tasks API" do
         expect(json.fetch("tasks").pluck("id")).to contain_exactly(matching_task.id)
       end
     end
+
+    context "with pagination" do
+      subject(:perform_request) { get "/tasks", params: { page: 2, per_page: 1 }, headers: headers }
+
+      let!(:older_task) { create(:task, title: "Older task") }
+      let!(:newer_task) { create(:task, title: "Newer task") }
+
+      before do
+        older_task.update_columns(created_at: Time.zone.parse("2026-05-08 12:00:00"))
+        newer_task.update_columns(created_at: Time.zone.parse("2026-05-09 12:00:00"))
+      end
+
+      it "returns the requested page" do
+        perform_request
+
+        expect(response).to have_http_status(:ok)
+        expect(json.fetch("tasks").pluck("id")).to eq([ older_task.id ])
+      end
+    end
   end
 
   describe "PATCH /tasks/:id" do

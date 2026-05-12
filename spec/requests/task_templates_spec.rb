@@ -54,8 +54,9 @@ RSpec.describe "TaskTemplates API" do
   end
 
   describe "GET /task_templates" do
-    subject(:perform_request) { get "/task_templates", headers: headers }
+    subject(:perform_request) { get "/task_templates", params: params, headers: headers }
 
+    let(:params) { {} }
     let!(:task_template) { create(:task_template, title: "Template") }
 
     it "lists task templates" do
@@ -63,6 +64,23 @@ RSpec.describe "TaskTemplates API" do
 
       expect(response).to have_http_status(:ok)
       expect(json.fetch("task_templates").pluck("id")).to include(task_template.id)
+    end
+
+    context "with pagination" do
+      let(:params) { { page: 2, per_page: 1 } }
+      let!(:newer_template) { create(:task_template, title: "Newer template") }
+
+      before do
+        task_template.update_columns(created_at: Time.zone.parse("2026-05-08 12:00:00"))
+        newer_template.update_columns(created_at: Time.zone.parse("2026-05-09 12:00:00"))
+      end
+
+      it "returns the requested page" do
+        perform_request
+
+        expect(response).to have_http_status(:ok)
+        expect(json.fetch("task_templates").pluck("id")).to eq([ task_template.id ])
+      end
     end
   end
 

@@ -48,7 +48,7 @@ class TasksController < ApplicationController
   end
 
   def list_params
-    params.permit(:status, :scheduled_at, :created_at, tags: [])
+    params.permit(:status, :scheduled_at, :created_at, :page, :per_page, tags: [])
   end
 
   def serialize_task(task)
