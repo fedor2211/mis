@@ -48,16 +48,16 @@ paths:
                 - tags
               example:
                 tags:
-                - id: 103
+                - id: 124
                   name: calls
                   persistent: false
-                  created_at: '2026-05-10T11:33:04Z'
-                  updated_at: '2026-05-10T11:33:04Z'
-                - id: 104
+                  created_at: '2026-05-12T12:55:48Z'
+                  updated_at: '2026-05-12T12:55:48Z'
+                - id: 125
                   name: reports
                   persistent: false
-                  created_at: '2026-05-10T11:33:04Z'
-                  updated_at: '2026-05-10T11:33:04Z'
+                  created_at: '2026-05-12T12:55:48Z'
+                  updated_at: '2026-05-12T12:55:48Z'
     post:
       summary: create
       tags:
@@ -113,11 +113,11 @@ paths:
                 - tag
               example:
                 tag:
-                  id: 100
+                  id: 121
                   name: urgent
                   persistent: false
-                  created_at: '2026-05-10T11:33:04Z'
-                  updated_at: '2026-05-10T11:33:04Z'
+                  created_at: '2026-05-12T12:55:48Z'
+                  updated_at: '2026-05-12T12:55:48Z'
         '422':
           description: does not create a duplicate
           content:
@@ -151,7 +151,7 @@ paths:
         required: true
         schema:
           type: integer
-        example: 110
+        example: 131
       responses:
         '200':
           description: destroys a tag
@@ -185,11 +185,11 @@ paths:
                 - tag
               example:
                 tag:
-                  id: 109
+                  id: 130
                   name: remove-me
                   persistent: false
-                  created_at: '2026-05-10T11:33:04Z'
-                  updated_at: '2026-05-10T11:33:04Z'
+                  created_at: '2026-05-12T12:55:48Z'
+                  updated_at: '2026-05-12T12:55:48Z'
         '422':
           description: does not destroy the tag
           content:
@@ -216,7 +216,7 @@ paths:
         required: true
         schema:
           type: integer
-        example: 102
+        example: 123
       responses:
         '200':
           description: returns a tag
@@ -250,11 +250,11 @@ paths:
                 - tag
               example:
                 tag:
-                  id: 102
+                  id: 123
                   name: reports
                   persistent: false
-                  created_at: '2026-05-10T11:33:04Z'
-                  updated_at: '2026-05-10T11:33:04Z'
+                  created_at: '2026-05-12T12:55:48Z'
+                  updated_at: '2026-05-12T12:55:48Z'
     patch:
       summary: update
       tags:
@@ -265,7 +265,7 @@ paths:
         required: true
         schema:
           type: integer
-        example: 108
+        example: 129
       requestBody:
         content:
           application/json:
@@ -317,11 +317,11 @@ paths:
                 - tag
               example:
                 tag:
-                  id: 105
+                  id: 126
                   name: updated
                   persistent: false
-                  created_at: '2026-05-10T11:33:04Z'
-                  updated_at: '2026-05-10T11:33:04Z'
+                  created_at: '2026-05-12T12:55:48Z'
+                  updated_at: '2026-05-12T12:55:48Z'
         '422':
           description: does not update the tag
           content:
@@ -408,18 +408,18 @@ paths:
                 - task_templates
               example:
                 task_templates:
-                - id: 68
+                - id: 75
                   title: Template
                   description: ''
                   periodicity: daily
-                  scheduled_at: '2026-05-11T10:00:00Z'
+                  scheduled_at: '2026-05-13T10:00:00Z'
                   ndays: 1
                   month_day:
                   active_until:
                   dates: []
                   tags: []
-                  created_at: '2026-05-10T11:33:04Z'
-                  updated_at: '2026-05-10T11:33:04Z'
+                  created_at: '2026-05-12T12:55:48Z'
+                  updated_at: '2026-05-12T12:55:48Z'
     post:
       summary: create
       tags:
@@ -463,13 +463,13 @@ paths:
               task_template:
                 title: Review labs
                 description: Morning review
-                scheduled_at: '2026-05-11T11:33:04Z'
+                scheduled_at: '2026-05-13T12:55:48Z'
                 tags:
                 - reports
-                periodicity: daily
+                periodicity: for_dates
                 ndays: 1
                 for_dates:
-                - '2026-05-12'
+                - '2026-05-14'
       responses:
         '201':
           description: persists template dates and enqueues task generation
@@ -531,20 +531,20 @@ paths:
                 - task_template
               example:
                 task_template:
-                  id: 67
+                  id: 74
                   title: Review labs
                   description: Morning review
                   periodicity: for_dates
-                  scheduled_at: '2026-05-11T11:33:04Z'
+                  scheduled_at: '2026-05-13T12:55:48Z'
                   ndays:
                   month_day:
                   active_until:
                   tags:
                   - reports
-                  created_at: '2026-05-10T11:33:04Z'
-                  updated_at: '2026-05-10T11:33:04Z'
+                  created_at: '2026-05-12T12:55:48Z'
+                  updated_at: '2026-05-12T12:55:48Z'
                   dates:
-                  - '2026-05-12'
+                  - '2026-05-14'
   "/task_templates/{id}":
     delete:
       summary: destroy
@@ -556,7 +556,7 @@ paths:
         required: true
         schema:
           type: integer
-        example: 70
+        example: 77
       responses:
         '200':
           description: cancels future tasks and destroys a task template
@@ -613,17 +613,17 @@ paths:
                 - task_template
               example:
                 task_template:
-                  id: 70
+                  id: 77
                   title: Template
                   description: ''
                   periodicity: daily
-                  scheduled_at: '2026-05-11T10:00:00Z'
+                  scheduled_at: '2026-05-13T10:00:00Z'
                   ndays: 1
                   month_day:
                   active_until:
                   tags: []
-                  created_at: '2026-05-10T11:33:04Z'
-                  updated_at: '2026-05-10T11:33:04Z'
+                  created_at: '2026-05-12T12:55:48Z'
+                  updated_at: '2026-05-12T12:55:48Z'
                   dates: []
     get:
       summary: show
@@ -635,7 +635,7 @@ paths:
         required: true
         schema:
           type: integer
-        example: 69
+        example: 76
       responses:
         '200':
           description: returns a task template
@@ -693,18 +693,18 @@ paths:
                 - task_template
               example:
                 task_template:
-                  id: 69
+                  id: 76
                   title: Template
                   description: ''
                   periodicity: daily
-                  scheduled_at: '2026-05-11T10:00:00Z'
+                  scheduled_at: '2026-05-13T10:00:00Z'
                   ndays: 1
                   month_day:
                   active_until:
                   tags:
                   - reports
-                  created_at: '2026-05-10T11:33:04Z'
-                  updated_at: '2026-05-10T11:33:04Z'
+                  created_at: '2026-05-12T12:55:48Z'
+                  updated_at: '2026-05-12T12:55:48Z'
                   dates: []
   "/tasks":
     get:
@@ -789,7 +789,7 @@ paths:
                 - tasks
               example:
                 tasks:
-                - id: 535
+                - id: 469
                   title: Tagged task
                   description: ''
                   scheduled_at: '2026-05-09T10:00:00Z'
@@ -797,8 +797,8 @@ paths:
                   task_template_id:
                   tags:
                   - reports
-                  created_at: '2026-05-10T11:33:04Z'
-                  updated_at: '2026-05-10T11:33:04Z'
+                  created_at: '2026-05-12T12:55:48Z'
+                  updated_at: '2026-05-12T12:55:48Z'
     post:
       summary: create
       tags:
@@ -834,7 +834,7 @@ paths:
               task:
                 title: Check patient chart
                 description: Review current medications
-                scheduled_at: '2026-05-11T11:33:04Z'
+                scheduled_at: '2026-05-13T12:55:48Z'
                 tags:
                 - reports
       responses:
@@ -885,16 +885,16 @@ paths:
                 - task
               example:
                 task:
-                  id: 528
+                  id: 462
                   title: Check patient chart
                   description: Review current medications
-                  scheduled_at: '2026-05-11T11:33:04Z'
+                  scheduled_at: '2026-05-13T12:55:48Z'
                   status: new
                   task_template_id:
                   tags:
                   - reports
-                  created_at: '2026-05-10T11:33:04Z'
-                  updated_at: '2026-05-10T11:33:04Z'
+                  created_at: '2026-05-12T12:55:48Z'
+                  updated_at: '2026-05-12T12:55:48Z'
   "/tasks/{id}":
     delete:
       summary: destroy
@@ -906,7 +906,7 @@ paths:
         required: true
         schema:
           type: integer
-        example: 542
+        example: 476
       responses:
         '200':
           description: destroys a task and returns json
@@ -952,13 +952,13 @@ paths:
                 - task
               example:
                 task:
-                  id: 542
+                  id: 476
                   title: Remove task
                   description: ''
                   scheduled_at: '2026-05-09T10:00:00Z'
                   status: new
-                  created_at: '2026-05-10T11:33:04Z'
-                  updated_at: '2026-05-10T11:33:04Z'
+                  created_at: '2026-05-12T12:55:48Z'
+                  updated_at: '2026-05-12T12:55:48Z'
                   tags: []
                   task_template_id:
     get:
@@ -971,7 +971,7 @@ paths:
         required: true
         schema:
           type: integer
-        example: 529
+        example: 463
       responses:
         '200':
           description: returns a task
@@ -1020,7 +1020,7 @@ paths:
                 - task
               example:
                 task:
-                  id: 529
+                  id: 463
                   title: Call patient
                   description: ''
                   scheduled_at: '2026-05-09T10:00:00Z'
@@ -1028,8 +1028,8 @@ paths:
                   task_template_id:
                   tags:
                   - calls
-                  created_at: '2026-05-10T11:33:04Z'
-                  updated_at: '2026-05-10T11:33:04Z'
+                  created_at: '2026-05-12T12:55:48Z'
+                  updated_at: '2026-05-12T12:55:48Z'
     patch:
       summary: update
       tags:
@@ -1040,7 +1040,7 @@ paths:
         required: true
         schema:
           type: integer
-        example: 541
+        example: 475
       requestBody:
         content:
           application/json:
@@ -1118,7 +1118,7 @@ paths:
                 - task
               example:
                 task:
-                  id: 537
+                  id: 471
                   title: Updated title
                   description: ''
                   scheduled_at: '2026-05-09T10:00:00Z'
@@ -1126,8 +1126,8 @@ paths:
                   task_template_id:
                   tags:
                   - reports
-                  created_at: '2026-05-10T11:33:04Z'
-                  updated_at: '2026-05-10T11:33:04Z'
+                  created_at: '2026-05-12T12:55:48Z'
+                  updated_at: '2026-05-12T12:55:48Z'
         '422':
           description: does not update the task
           content:

@@ -42,6 +42,7 @@ RSpec.describe TaskTemplates::CreateService do
       {
         title: "Review labs",
         scheduled_at: scheduled_at.iso8601,
+        periodicity: "for_dates",
         for_dates: [ for_date.iso8601 ],
         tags: [ "reports" ]
       }

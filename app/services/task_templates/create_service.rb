@@ -11,8 +11,7 @@ module TaskTemplates
       attributes = validation.to_h
       tag_names = attributes.delete(:tags)
       for_dates = attributes.delete(:for_dates)
-      attributes[:periodicity] = :for_dates if for_dates.present?
-      attributes[:dates] = for_dates if for_dates.present?
+      attributes[:dates] = for_dates if for_dates.present? && attributes[:periodicity] == "for_dates"
 
       task_template = TaskTemplate.transaction do
         TaskTemplate.create!(attributes).tap do |template|

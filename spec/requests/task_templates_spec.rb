@@ -37,7 +37,7 @@ RSpec.describe "TaskTemplates API" do
 
     context "with certain dates" do
       let(:for_date) { 2.days.from_now.to_date }
-      let(:periodicity_params) { { for_dates: [ for_date.iso8601 ] } }
+      let(:periodicity_params) { { periodicity: "for_dates", for_dates: [ for_date.iso8601 ] } }
 
       it "persists template dates and enqueues task generation" do
         expect { perform_request }.to change(TaskTemplate, :count).by(1).and have_enqueued_job(GenerateTaskTemplateTasksJob)
