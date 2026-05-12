@@ -10,6 +10,12 @@ devcontainer up
 ```bash
 devcontainer exec bash
 ```
+
+После развертывания приложения в контейнере подготавливаем базу данных:
+```bash
+bundle exec rails db:prepare
+```
+
 ### Запуск приложения
 ```bash
 bundle exec rails server
