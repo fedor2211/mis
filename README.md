@@ -1,6 +1,6 @@
 # README
 ## Локальный запуск
-Необходимо поставить в IDE плагин для работы с devcontainers, подробнее [здесь](https://containers.dev/supporting).
+Необходимо поставить в IDE плагин для работы с devcontainers, подробнее [здесь](https://containers.dev/supporting). Помимо этого необходимо, чтобы на устройстве были установлены Docker и Docker Compose.
 
 Если IDE не имеет такого плагина, то используем devcontainers-cli, как его ставить смотрим [здесь](https://github.com/devcontainers/cli). Для сборки проекта вводим в директории проекта:
 ```bash
